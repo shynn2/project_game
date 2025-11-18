@@ -32,12 +32,12 @@ typedef struct {
 
 // 게임 내에서 움직이는 물체 (훠궈 재료, 신발)를 구현하기 위한 구조체
 typedef struct {
-    SDL_Texture *texture; // 텍스쳐 (그림파일) [cite: 532]
-    SDL_Rect pos;         // 객체의 좌표, 위치, 너비, 높이를 저장하는 구조체 [cite: 533, 534]
+    SDL_Texture *texture; // 텍스쳐 (그림파일) 
+    SDL_Rect pos;         // 객체의 좌표, 위치, 너비, 높이를 저장하는 구조체 
     
-    double v_x;           // x방향 속도벡터 [cite: 536]
-    double v_y;           // y방향 속도벡터 (중력 적용) [cite: 537]
-    double angle;         // 객체의 회전 각도 (선택 사항)
+    double v_x;           // x방향 속도벡터 
+    double v_y;           // y방향 속도벡터 (중력 적용) 
+    double angle;         // 객체의 각도
 
     IngredientType type;  // 재료의 종류 (고기, 신발 등)
     bool is_active;       // 현재 활성화되어 날아가는 중인지
