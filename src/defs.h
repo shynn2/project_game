@@ -18,6 +18,7 @@
 #define FPS 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
+#define GRAVITY 0.5
 
 
 // 구조체 정의 
