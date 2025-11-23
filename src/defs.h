@@ -29,36 +29,46 @@
 #define GRAVITY 0.5f
 
 
-// 구조체 정의 
+
+// APP (창, 렌더러, 마우스 상태)
 typedef struct {
-    SDL_Window *g_window;
-    SDL_Renderer *g_renderer;
+    SDL_Renderer *renderer;
+    SDL_Window *window;
     TTF_Font *font;
+    
+    // 마우스 상태 (슬라이스 기능을 위해 필요)
+    int mouse_x;
+    int mouse_y;
+    int mouse_down; // 클릭 중인가? (1:Yes, 0:No)
+} App;
 
-} APP;
-
-
-// 게임 내에서 움직이는 물체 (훠궈 재료, 신발)를 구현하기 위한 구조체
+// 재료 정보
 typedef struct {
-    SDL_Texture *texture; // 텍스쳐 (그림파일) 
-    SDL_Rect pos;         // 객체의 좌표, 위치, 너비, 높이를 저장하는 구조체 
-    
-    double v_x;           // x방향 속도벡터 
-    double v_y;           // y방향 속도벡터 (중력 적용) 
-    double angle;         // 객체의 각도
-
-    IngredientType type;  // 재료의 종류 (고기, 신발 등)
-    bool is_active;       // 현재 활성화되어 날아가는 중인지
-    bool is_cut;          // 베였는지 여부
-    
+    float x, y;       // 현재 위치 (float으로 해야 부드러움)
+    float dx, dy;     // 이동 속도 (dx:가로, dy:세로)
+    int w, h;         // 크기
+    int type;         // 재료 종류 (버섯인지 고기인지)
+    int active;       // 1: 화면에 살아있음, 0: 죽음(재사용 대기)
+    int is_sliced;    // 1: 이미 칼로 베임, 0: 안 베임
+    SDL_Texture *texture; // 재료 그림
 } Ingredient;
 
-// 게임 내에 문자열을 표시할 경우 문자열을 나타내는 구조체 (스코어보드) [cite: 543]
+// Text 점수판, 목숨표에 사용
 typedef struct {
-    SDL_Rect pos;       // 좌표와 위치 [cite: 550, 551]
-    SDL_Color color;    // 글씨 색깔 [cite: 552]
-    SDL_Surface *surface; // 폰트 렌더링을 위해 필요한 구조체 [cite: 553]
-    SDL_Texture *texture; // 문자열을 저장한 텍스처 [cite: 554]
+    int x, y;
+    SDL_Color color;
+    SDL_Texture *texture;
+    SDL_Surface *surface;
+    SDL_Rect pos;
 } Text;
+
+//공유 자원
+
+extern App app;
+extern Ingredient ingredients[MAX_INGREDIENTS]; // 재료들을 모아둔 배열
+extern SDL_Texture* ingredient_textures[NUM_TEXTURES]; // 로딩된 이미지 원본들
+extern int score;     // 현재 점수
+extern int lives;     // 남은 목숨
+extern int high_score; // 최고 점수
 
 #endif
