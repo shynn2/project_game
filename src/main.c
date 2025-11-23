@@ -1,19 +1,22 @@
 #include <stdio.h>
-#include <SDL2/SDL.h>
+#include <time.h>
 
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+#include "main.h"
+
 
 int g_game_running = 1;
 
+int main(void) {
 
+    int tmpcnt = 0;
 
-int main(int argc, char* argv[]) {
+    srand(time(NULL));
+
     // 1. 초기화 (Initialization)
-    if (!init_sdl()) {
-        printf("게임 초기화 실패 \n");
-        return 1;
-    }
+    init_sdl();
+    
+
+        
 
     // 2. 게임 루프 (The Game Loop)
     while (g_game_running) {
@@ -33,6 +36,7 @@ int main(int argc, char* argv[]) {
 
     // 3. 종료 처리 (Cleanup)
     cleanup_sdl();
+
     return 0;
 }
 
