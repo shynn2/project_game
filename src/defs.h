@@ -15,6 +15,14 @@
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_mixer.h"
 
+// 재료 종류 (ID)
+#define TYPE_MUSHROOM 0
+#define TYPE_FUZHU  1
+#define TYPE_CABBAGE   2
+#define TYPE_BEEF    3 //4점짜리
+#define TYPE_SHOES     4 // 함정 (목숨깎여)
+#define TYPE_ROCK     5 // 함정 (목숨 깎임)
+#define NUM_TEXTURES  6 // 이미지 총 개수
 #define FPS 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
