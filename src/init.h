@@ -4,13 +4,16 @@
 #include "defs.h"
 
 extern App app;
-extern Ingredient type[MIN_INGREDIENT];
-extern Ingredient mushroom;
-extern Ingredient cabbage;
-extern Ingredient meat;
-extern Ingredient beanSprouts;
+extern App app;
 
+extern TextObject score_text;
 
+extern TextObject health_text;
+
+extern char text_buffer[BUFSIZE];
+
+extern Mix_Music *bgm = NULL;
+extern Mix_Chunk *effect_slice = NULL;
 
 extern int g_game_running;
 
@@ -20,10 +23,8 @@ void InitIngredient(void);
 void handle_events(void);
 void update_game(void);
 void render_game(void);
-void InitTrail(void);
 void cleanup_sdl(void);
 
-void render_game(void);
 
 
 #endif
