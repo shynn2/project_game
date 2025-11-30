@@ -8,7 +8,7 @@ void init_sdl(void) {
         printf("SDL 초기화 에러: %s\n", SDL_GetError());
         exit(1);
     }
-
+/*
 void InitTTF(void) {
     if (TTF_Init() < 0) {
         printf("[ERROR] in InitTTF(): %s", SDL_GetError());
@@ -26,7 +26,7 @@ void InitTTF(void) {
 
     return;
 }
-
+*/
     // 창 (Window) 생성, 오류 시 프로그램 종료
     app.g_window = SDL_CreateWindow(
         "훠궈 요리사", 
