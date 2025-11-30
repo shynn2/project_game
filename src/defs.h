@@ -15,14 +15,11 @@
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_mixer.h"
 
-#define FPS 60
-#define BUFSIZE 1024
+#define FPS 60 //프레임
+#define BUFSIZE 1024 
 
 #define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-
-#define PLAYER_WIDTH 
-#define PLAYER_HEIGHT     
+#define SCREEN_HEIGHT 720  
 
 #define INGREDIENTS_WIDTH 8      
 #define INGREDIENTS_HEIGHT 8     
@@ -31,8 +28,10 @@
 #define TOTAL_INGREDIENT 6  // 화면에 나타난는 재료의 최소 개수
 #define MAX_INGREDIENTS 50  // 화면에 나타나는 재료의 최대 개수 
 
-#define GRAVITY 0.5
+#define GRAVITY 0.5f
 #define FONTSIZE 20       
+
+#define TRAIL_LENGTH 10
 
 typedef enum {MUSHROOM, CABBAGE, MEAT, BEANSPROUTS, SHOES, STONE} TypeIngredient;
 
@@ -44,6 +43,9 @@ typedef struct {
     TTF_Font *font;
 
     Game game;
+    // [추가] 마우스 슬라이스 궤적 저장용
+    SDL_Point trail_points[TRAIL_LENGTH]; 
+    int trail_head; // 배열의 현재 위치 (순환 버퍼용)
 
 } App;
 
