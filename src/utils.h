@@ -11,11 +11,14 @@
 // [충돌 감지 함수]
 
 /**
- * @brief 특정 점(x, y)이 사각형(rect) 안에 있는지 확인합니다.
- * 마우스 커서가 재료 위에 있는지 판정할 때 사용합니다.
- * @return 1(충돌/안에 있음), 0(충돌 안 함)
+ * @brief 선분(마우스 궤적)이 사각형(재료)과 충돌했는지 확인합니다.
+ * 마우스를 빠르게 움직였을 때 재료를 통과하는 현상(터널링)을 방지합니다.
+ * @param x1, y1 선분의 시작점 (이전 마우스 위치)
+ * @param x2, y2 선분의 끝점 (현재 마우스 위치)
+ * @param rect 확인할 사각형 영역
+ * @return 1(충돌), 0(충돌 안 함)
  */
-int CheckPointInRect(int x, int y, const SDL_Rect *rect);
+int CheckLineRectHit(int x1, int y1, int x2, int y2, const SDL_Rect *rect);
 
 /**
  * @brief 재료가 화면 밖(바닥)으로 나갔는지 확인합니다.
