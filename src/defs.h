@@ -25,7 +25,7 @@
 #define INGREDIENTS_HEIGHT 8     
 #define INGREDIENTS_SPEED 6
 
-#define MIN_INGREDIENT 2  // 화면에 나타나는 재료의 최소 개수
+#define MIN_INGREDIENT 3  // 화면에 나타나는 재료의 최소 개수
 #define MAX_INGREDIENTS 50  // 화면에 나타나는 재료의 최대 개수 
 
 #define GRAVITY 0.5f
@@ -38,6 +38,16 @@ typedef enum {MUSHROOM, CABBAGE, MEAT, BEANSPROUTS, SHOES, STONE} TypeIngredient
 
 // 구조체 정의 
 typedef struct {
+    int score;          // 현재 점수
+    int lives;          // 남은 목숨 (여기 들어갑니다!)
+    int game_over;     // 게임 종료 여부
+    
+    // 게임 내 모든 재료들을 여기서 관리
+    Ingredient ingredients[MAX_INGREDIENTS]; 
+} Game;
+
+
+typedef struct {
     SDL_Window *g_window;
     SDL_Renderer *g_renderer;
     TTF_Font *font;
@@ -49,14 +59,7 @@ typedef struct {
 
 } App;
 
-typedef struct {
-    int score;          // 현재 점수
-    int lives;          // 남은 목숨 (여기 들어갑니다!)
-    int game_over;     // 게임 종료 여부
-    
-    // 게임 내 모든 재료들을 여기서 관리
-    Ingredient ingredients[MAX_INGREDIENTS]; 
-} Game;
+
 
 
 typedef struct {
