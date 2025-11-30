@@ -42,3 +42,14 @@ int RandInt(int min, int max) {
 }
 
 // 실수 난수 생성 (min 이상 max 미만)
+double RandDouble(double min, double max) {
+    if (min >= max) return min;
+    // 0.0 ~ 1.0 사이의 실수 난수 생성 후 범위에 맞게 변환
+    double scale = (double)rand() / (double)RAND_MAX;
+    return min + scale * (max - min);
+}
+
+// Degree -> Radian 변환
+double DegToRad(double degrees) {
+    return degrees * (M_PI / 180.0);
+}
