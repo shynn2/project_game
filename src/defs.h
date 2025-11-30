@@ -1,5 +1,5 @@
 #ifndef DEFS_H
-#define INIT_H
+#define DEFS_H
 
 
 // 상수 매크로 정의 
@@ -15,60 +15,65 @@
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_mixer.h"
 
-// 재료 종류 (ID)
-#define TYPE_MUSHROOM 0
-#define TYPE_FUZHU  1
-#define TYPE_CABBAGE   2
-#define TYPE_BEEF    3 //4점짜리
-#define TYPE_SHOES     4 // 함정 (목숨깎여)
-#define TYPE_ROCK     5 // 함정 (목숨 깎임)
-#define NUM_TEXTURES  6 // 이미지 총 개수
 #define FPS 60
+#define BUFSIZE 1024
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
-#define GRAVITY 0.5f
+
+#define PLAYER_WIDTH 
+#define PLAYER_HEIGHT     
+
+#define INGREDIENTS_WIDTH 8      
+#define INGREDIENTS_HEIGHT 8     
+#define INGREDIENTS_SPEED 6
+
+#define TOTAL_INGREDIENT 6  // 화면에 나타난는 재료의 최소 개수
+#define MAX_INGREDIENTS 50  // 화면에 나타나는 재료의 최대 개수 
+
+#define GRAVITY 0.5
+#define FONTSIZE 20       
+
+typedef enum {MUSHROOM, CABBAGE, MEAT, BEANSPROUTS, SHOES, STONE} TypeIngredient;
 
 
-
-// APP (창, 렌더러, 마우스 상태)
+// 구조체 정의 
 typedef struct {
-    SDL_Renderer *renderer;
-    SDL_Window *window;
+    SDL_Window *g_window;
+    SDL_Renderer *g_renderer;
     TTF_Font *font;
-    
-    // 마우스 상태 (슬라이스 기능을 위해 필요)
-    int mouse_x;
-    int mouse_y;
-    int mouse_down; // 클릭 중인가? (1:Yes, 0:No)
+
+    Game game;
+
 } App;
 
-// 재료 정보
 typedef struct {
-    float x, y;       // 현재 위치 (float으로 해야 부드러움)
-    float dx, dy;     // 이동 속도 (dx:가로, dy:세로)
-    int w, h;         // 크기
-    int type;         // 재료 종류 (버섯인지 고기인지)
-    int active;       // 1: 화면에 살아있음, 0: 죽음(재사용 대기)
-    int is_sliced;    // 1: 이미 칼로 베임, 0: 안 베임
-    SDL_Texture *texture; // 재료 그림
+    int score;          // 현재 점수
+    int lives;          // 남은 목숨 (여기 들어갑니다!)
+    int game_over;     // 게임 종료 여부
+    
+    // 게임 내 모든 재료들을 여기서 관리
+    Ingredient ingredients[MAX_INGREDIENTS]; 
+} Game;
+
+
+typedef struct {
+    float x, y;
+    float dx, dy;
+    int type;           // 0~3:식재료, 4:돌, 5:신발
+    int is_enemy;      // 1: 닿으면 목숨 깎임, 0: 획득
+    int is_active;     // 현재 화면에 살아있는가?
+    int is_sliced;     // 베어졌는가?
+    double angle;       // 회전 각도
+    int w, h;            //  크기
+    SDL_Texture *texture; // 이미지
+
 } Ingredient;
 
-// Text 점수판, 목숨표에 사용
+
 typedef struct {
-    int x, y;
-    SDL_Color color;
-    SDL_Texture *texture;
-    SDL_Surface *surface;
-    SDL_Rect pos;
-} Text;
-
-//공유 자원
-
-extern App app;
-extern Ingredient ingredients[MAX_INGREDIENTS]; // 재료들을 모아둔 배열
-extern SDL_Texture* ingredient_textures[NUM_TEXTURES]; // 로딩된 이미지 원본들
-extern int score;     // 현재 점수
-extern int lives;     // 남은 목숨
-extern int high_score; // 최고 점수
+    SDL_Texture *texture; // 글자 이미지 데이터 (가장 중요)
+    SDL_Rect rect;        // 위치(x, y)와 크기(w, h) 정보
+} TextObject;
 
 #endif
