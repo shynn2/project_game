@@ -4,10 +4,10 @@
 #include "defs.h"
 
 #include "init.h"
-/*#include "input.h"
+#include "input.h"
 #include "action.h"
 #include "draw.h"
-#include "sound.h"*/
+#include "sound.h"
 
 APP app;
 
