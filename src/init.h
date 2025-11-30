@@ -18,6 +18,7 @@ void InitIngredient(void);
 void handle_events(void);
 void update_game(void);
 void render_game(void);
+void InitTrail(void);
 void cleanup_sdl(void);
 
 void render_game(void);
