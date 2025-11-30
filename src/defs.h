@@ -36,6 +36,20 @@
 typedef enum {MUSHROOM, CABBAGE, BEANSPROUTS, MEAT, SHOES, STONE} TypeIngredient;
 
 
+typedef struct {
+    float x, y;
+    float dx, dy;
+    int type;           // 0~3:식재료, 4:돌, 5:신발
+    int is_enemy;      // 1: 닿으면 목숨 깎임, 0: 획득
+    int is_active;     // 현재 화면에 살아있는가?
+    int is_sliced;     // 베어졌는가?
+
+    int w, h;            //  크기
+    SDL_Texture *texture; // 이미지
+
+} Ingredient;
+
+
 // 구조체 정의 
 typedef struct {
     int score;          // 현재 점수
@@ -60,20 +74,6 @@ typedef struct {
 } App;
 
 
-
-
-typedef struct {
-    float x, y;
-    float dx, dy;
-    int type;           // 0~3:식재료, 4:돌, 5:신발
-    int is_enemy;      // 1: 닿으면 목숨 깎임, 0: 획득
-    int is_active;     // 현재 화면에 살아있는가?
-    int is_sliced;     // 베어졌는가?
-
-    int w, h;            //  크기
-    SDL_Texture *texture; // 이미지
-
-} Ingredient;
 
 
 typedef struct {
