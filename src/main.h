@@ -10,6 +10,14 @@
 #include "sound.h"
 
 APP app;
+TextObject score_text;
+
+TextObject health_text;
+
+char text_buffer[BUFSIZE];
+
+Mix_Music *bgm = NULL;
+Mix_Chunk *effect_slice = NULL;
 
 
 
