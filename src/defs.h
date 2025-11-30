@@ -33,7 +33,7 @@
 
 #define TRAIL_LENGTH 10
 
-typedef enum {MUSHROOM, CABBAGE, MEAT, BEANSPROUTS, SHOES, STONE} TypeIngredient;
+typedef enum {MUSHROOM, CABBAGE, BEANSPROUTS, MEAT, SHOES, STONE} TypeIngredient;
 
 
 // 구조체 정의 
