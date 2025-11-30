@@ -59,6 +59,16 @@ void handle_events(void) {
     }
 }
 
+// [구현] 마우스 슬라이스 궤적 초기화
+void InitTrail(void) {
+    app.trail_head = 0;
+    for (int i = 0; i < TRAIL_LENGTH; i++) {
+        // -1은 '아직 점이 찍히지 않음'을 의미 (유효하지 않은 좌표)
+        app.trail_points[i].x = -1;
+        app.trail_points[i].y = -1;
+    }
+}
+
 /**
  * 게임의 논리와 상태를 업데이트합니다. (현재는 비어있음)
  */
