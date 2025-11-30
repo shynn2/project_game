@@ -4,11 +4,13 @@
 #include "defs.h"
 
 extern App app;
-extern Entity type[TOTAL_INGREDIENT];
-extern Entity cabbage;
-extern Entity mushrooms;
-extern Entity bean_sprouts;
-extern Entity meat;
+extern Ingredient type[MIN_INGREDIENT];
+extern Ingredient mushroom;
+extern Ingredient cabbage;
+extern Ingredient meat;
+extern Ingredient beanSprouts;
+
+
 
 extern int g_game_running;
 
