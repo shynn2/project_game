@@ -43,7 +43,8 @@ void InitTTF(void) {
         exit(1);
     }
 
-    // 렌더러(Renderer) 생성
+    // 렌더러(Renderer) 생성 SDL_CreateRenderer는 윈도우 안에 그림을 그리는 **화가(Renderer)**를 생성하는 함수입니다.
+    // 윈도우만 생성해서는 화면에 아무것도 그릴 수 없기 때문에, 실제로 그리는 작업을 담당할 렌더러가 반드시 필요합니다.
     app.g_renderer = SDL_CreateRenderer(app.g_window, -1, SDL_RENDERER_ACCELERATED);
 
     if (app.g_renderer == NULL) {
