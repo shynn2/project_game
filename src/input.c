@@ -18,12 +18,13 @@ void handle_events(void) {
             g_game_running = 0;
         }
 
-        // 2. 키보드 이벤트
+        /* 2. 키보드 이벤트
         if (event.type == SDL_KEYDOWN) {
             // ESC 누르면 종료
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 g_game_running = 0;
             }
+            */
             // 게임 오버 상태에서 R 키 누르면 재시작
             /*if (app.game.game_over && event.key.keysym.sym == SDLK_r) {
                 // InitGame(); // 재시작 함수가 있다면 호출
