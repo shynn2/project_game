@@ -20,6 +20,13 @@ void InitTTF(void) {
     return;
 }
 
+    void QuitTTF(void) {
+    TTF_CloseFont(app.font);
+    TTF_Quit();
+
+    return;
+}
+
     // 창 (Window) 생성, 오류 시 프로그램 종료
     app.g_window = SDL_CreateWindow(
         "훠궈 요리사", 
