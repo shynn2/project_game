@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "init.h"
 
+#if 0
 // SDL 시스템 초기화하고 창과 렌더러를 생성
 void init_sdl(void) {
     // SDL 초기화(비디오 시스템)
@@ -8,25 +9,7 @@ void init_sdl(void) {
         printf("SDL 초기화 에러: %s\n", SDL_GetError());
         exit(1);
     }
-/*
-void InitTTF(void) {
-    if (TTF_Init() < 0) {
-        printf("[ERROR] in InitTTF(): %s", SDL_GetError());
-        exit(1);
-    }
 
-    app.font = TTF_OpenFont("./ttf/LiberationSans-Regular.ttf", 20);
-
-    return;
-}
-
-    void QuitTTF(void) {
-    TTF_CloseFont(app.font);
-    TTF_Quit();
-
-    return;
-}
-*/
     // 창 (Window) 생성, 오류 시 프로그램 종료
     app.g_window = SDL_CreateWindow(
         "훠궈 요리사", 
@@ -43,8 +26,7 @@ void InitTTF(void) {
         exit(1);
     }
 
-    // 렌더러(Renderer) 생성 SDL_CreateRenderer는 윈도우 안에 그림을 그리는 **화가(Renderer)**를 생성하는 함수입니다.
-    // 윈도우만 생성해서는 화면에 아무것도 그릴 수 없기 때문에, 실제로 그리는 작업을 담당할 렌더러가 반드시 필요합니다.
+    // 렌더러(Renderer) 생성
     app.g_renderer = SDL_CreateRenderer(app.g_window, -1, SDL_RENDERER_ACCELERATED);
 
     if (app.g_renderer == NULL) {
@@ -75,16 +57,6 @@ void handle_events(void) {
             }
         }
         // 마우스 입력, 슬라이스 궤적 추적 등은 여기에 추가됩니다.
-    }
-}
-
-// [구현] 마우스 슬라이스 궤적 초기화
-void InitTrail(void) {
-    app.trail_head = 0;
-    for (int i = 0; i < TRAIL_LENGTH; i++) {
-        // -1은 '아직 점이 찍히지 않음'을 의미 (유효하지 않은 좌표)
-        app.trail_points[i].x = -1;
-        app.trail_points[i].y = -1;
     }
 }
 
@@ -130,13 +102,7 @@ void cleanup_sdl(void) {
 
 
 void InitIngredient(void) {
-    cabbage.texture = IMG_LoadTexture(app.g_renderer, "./gfx/cabbage.png");
-    cabbage.pos.x = SCREEN_WIDTH / 2;
-    cabbage.pos.y = SCREEN_HEIGHT / 2;
-    // player.health = 1;
-    SDL_QueryTexture(cabbage.texture, NULL, NULL, &(cabbage.pos.w),
-                     &(cabbage.pos.h));
-
+    
     return;
 }
 
@@ -147,17 +113,141 @@ void render_game(void) {
     SDL_RenderClear(app.g_renderer);
 
     // --- ▼ 2. (추가!) 양배추 그리기 ▼ ---
-    // (cabbage.texture가 NULL이 아닐 때만 그리는 것이 안전합니다)
-    if (cabbage.texture != NULL) {
-        SDL_RenderCopy(
-            app.g_renderer,     // 1. 사용할 렌더러
-            cabbage.texture,    // 2. 그릴 텍스처 (양배추)
-            NULL,               // 3. 텍스처의 어느 부분을 그릴지 (NULL = 전체)
-            &cabbage.pos        // 4. 화면 어디에(x,y) 어떤 크기(w,h)로 그릴지
-        );
-    }
-    // --- ▲ ---------------------- ▲ ---
+    
 
     // 3. 렌더링 결과를 최종적으로 화면에 표시
     SDL_RenderPresent(app.g_renderer);
 }
+
+#endif
+
+#if 1
+void InitSDL(void) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("[ERROR] in InitSDL(): %s\n", SDL_GetError());
+        exit(1);
+    }
+
+    app.g_window = SDL_CreateWindow(
+        "Huoguo Chef",
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        0);
+
+    if (!app.g_window) {
+        printf("[ERROR] in CreateWindow: %s\n", SDL_GetError());
+        exit(1);
+    }
+
+
+    app.g_renderer = SDL_CreateRenderer(app.g_window, -1, SDL_RENDERER_ACCELERATED);
+    
+    if (!app.g_renderer) {
+        printf("[ERROR] in CreateRenderer: %s\n", SDL_GetError());
+        exit(1);
+    }
+
+    // 이미지 라이브러리 초기화
+    if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0) {
+        printf("[ERROR] in InitIMG: %s\n", IMG_GetError());
+        exit(1);
+    }
+
+    return;
+}
+
+void InitTTF(void) {
+    if (TTF_Init() < 0) {
+        printf("[ERROR] in InitTTF(): %s\n", TTF_GetError());
+        exit(1);
+    }
+
+    // 폰트 로드 (경로 확인 필수)
+    app.font = TTF_OpenFont("./assets/font.ttf", FONTSIZE);
+
+    if (!app.font) {
+        printf("[ERROR] Failed to load font: %s\n", TTF_GetError());
+        exit(1);
+    }
+
+    return;
+}
+
+void InitMemorySet(void) {
+    // 구조체 메모리를 0으로 초기화 (예제 스타일)
+    memset(&app, 0, sizeof(App));
+    memset(&score_text, 0, sizeof(TextObject));
+    memset(&health_text, 0, sizeof(TextObject));
+
+    return;
+}
+
+void InitGameData(void) {
+    // 게임 변수 초기화 (예제의 InitPlayer, InitBullet 역할)
+    app.game.score = 0;
+    app.game.health = MAX_HEALTH;
+    app.game.game_over = 0;
+
+    // 모든 재료 슬롯 비활성화
+    for (int i = 0; i < MAX_INGREDIENTS; i++) {
+        app.game.ingredients[i].is_active = 0;
+        app.game.ingredients[i].texture = NULL;
+    }
+
+
+    return;
+}
+
+
+void InitScoreBoard(void) {
+    // 점수 텍스트 위치 설정
+    score_text.rect.x = 20;
+    score_text.rect.y = 20;
+    score_text.texture = NULL;
+
+    // 목숨 텍스트 위치 설정
+    health_text.rect.x = SCREEN_WIDTH - 150; // 오른쪽 상단
+    health_text.rect.y = 20;
+    health_text.texture = NULL;
+
+    return;
+}
+
+void QuitSDL(int flag) {
+    // 1. 텍스트 텍스처 해제
+    if (score_text.texture) SDL_DestroyTexture(score_text.texture);
+    if (health_text.texture) SDL_DestroyTexture(health_text.texture);
+
+    // 2. 재료 텍스처 해제 (남아있는 재료가 있다면)
+    for (int i = 0; i < MAX_INGREDIENTS; i++) {
+        if (app.game.ingredients[i].texture) {
+            SDL_DestroyTexture(app.game.ingredients[i].texture);
+        }
+    }
+
+    // 3. SDL 시스템 해제
+    if (app.g_renderer) SDL_DestroyRenderer(app.g_renderer);
+    if (app.g_window) SDL_DestroyWindow(app.g_window);
+
+    QuitTTF();
+    IMG_Quit();
+    SDL_Quit();
+
+    exit(flag);
+
+    return;
+}
+
+void QuitTTF(void) {
+    if (app.font) {
+        TTF_CloseFont(app.font);
+        app.font = NULL;
+    }
+    TTF_Quit();
+
+    return;
+}
+
+#endif
