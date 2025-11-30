@@ -66,7 +66,7 @@ typedef struct {
     int is_enemy;      // 1: 닿으면 목숨 깎임, 0: 획득
     int is_active;     // 현재 화면에 살아있는가?
     int is_sliced;     // 베어졌는가?
-    double angle;       // 회전 각도
+
     int w, h;            //  크기
     SDL_Texture *texture; // 이미지
 
