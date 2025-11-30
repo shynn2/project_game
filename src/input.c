@@ -6,7 +6,7 @@ extern App app;
 extern int g_game_running;
 
 // 초기화가 필요한 경우를 위해 (게임 재시작 등)
-//InitGame 있다면 게임 재시작 함수가 있따면 !! extern void InitGame(void); 
+extern void InitGame(void); 
 
 void handle_events(void) {
     SDL_Event event;
@@ -53,7 +53,7 @@ void handle_events(void) {
             if (app.mouse_down) {
                 // action.c 에 있는 CheckSlice 호출
                 // (이전 위치와 현재 위치를 잇는 선분이 재료를 베었는지 확인)
-                CheckSlice(app.game.ingredients, MAX_INGREDIENTS, prev_x, prev_y, app.mouse_x, app.mouse_y);
+                CheckSlice(prev_x, prev_y, app.mouse_x, app.mouse_y);
             } //마우스 버튼을 누르고 있다면 app.mouse_down이 1이됨 따라서 true --> 조건문 실행
         }
 
