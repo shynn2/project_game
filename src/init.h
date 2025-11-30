@@ -3,28 +3,22 @@
 
 #include "defs.h"
 
+// main.c에 정의된 전역 변수들을 사용하겠다고 선언 (예제 스타일)
 extern App app;
-extern App app;
-
 extern TextObject score_text;
+extern TextObject life_text;
 
-extern TextObject health_text;
+// 1. 시스템 초기화
+void InitSDL(void);
+void InitTTF(void);
+void InitMemorySet(void);
 
-extern char text_buffer[BUFSIZE];
+// 2. 게임 데이터 초기화
+void InitGameData(void);   // 예제의 InitPlayer + InitBullet 역할 (데이터 리셋)
+void InitScoreBoard(void); // 점수판 및 목숨 텍스트 초기화
 
-extern Mix_Music *bgm = NULL;
-extern Mix_Chunk *effect_slice = NULL;
-
-extern int g_game_running;
-
-void init_sdl(void);
-void InitIngredient(void);
-
-void handle_events(void);
-void update_game(void);
-void render_game(void);
-void cleanup_sdl(void);
-
-
+// 3. 종료 처리
+void QuitSDL(int flag);
+void QuitTTF(void);
 
 #endif
