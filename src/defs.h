@@ -46,6 +46,7 @@ typedef struct {
 
     int w, h;            //  크기
     SDL_Texture *texture; // 이미지
+    SDL_Rect pos;
 
 } Ingredient;
 
@@ -66,7 +67,12 @@ typedef struct {
     SDL_Renderer *g_renderer;
     TTF_Font *font;
 
+
+    int mouse_x;
+    int mouse_y;
+    int mouse_down;
     Game game;
+
     // [추가] 마우스 슬라이스 궤적 저장용
     SDL_Point trail_points[TRAIL_LENGTH]; 
     int trail_head; // 배열의 현재 위치 (순환 버퍼용)
