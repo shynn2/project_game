@@ -9,6 +9,17 @@ void init_sdl(void) {
         exit(1);
     }
 
+void InitTTF(void) {
+    if (TTF_Init() < 0) {
+        printf("[ERROR] in InitTTF(): %s", SDL_GetError());
+        exit(1);
+    }
+
+    app.font = TTF_OpenFont("./ttf/LiberationSans-Regular.ttf", 20);
+
+    return;
+}
+
     // 창 (Window) 생성, 오류 시 프로그램 종료
     app.g_window = SDL_CreateWindow(
         "훠궈 요리사", 
