@@ -1,22 +1,22 @@
-#include "defs.h" 
-#include "action.h" // ActIngredients 함수 선언 포함
 
-void ActIngredients(Ingredient ingredients[], int count) {
-    // GRAVITY 상수는 defs.h에 #define GRAVITY 0.5 와 같이 정의되어야 합니다.
-    const double GRAVITY = 0.5; 
+
+#include "utils.h" // (파일 맨 위에 이 줄이 없다면 추가해주세요)
+#include "defs.h"
+
+// CheckSlice 함수의 실제 구현 내용
+void CheckSlice(Ingredient ingredients[], int count, int x1, int y1, int x2, int y2) {
+    // 너무 짧은 움직임(클릭 등)은 무시
+    if (abs(x1 - x2) < 5 && abs(y1 - y2) < 5) return;
 
     for (int i = 0; i < count; i++) {
-        // 활성화된 재료만 업데이트
-        if (ingredients[i].is_active && !ingredients[i].is_cut) {
-            
-            // 1. 중력 적용: y축 속도(v_y) 증가 (위로 쏘았으므로 v_y는 점점 양수 방향으로 바뀝니다)
-            ingredients[i].v_y += GRAVITY; 
-            
-            // 2. 위치 업데이트 (v_x는 변함 없이, v_y는 중력 적용됨)
-            ingredients[i].pos.x += (int)ingredients[i].v_x;
-            ingredients[i].pos.y += (int)ingredients[i].v_y;
-            
-            // (화면 밖으로 나갔을 때 비활성화 로직 추가 예정)
+        // 활성화되어 있고 안 잘린 재료만 확인
+        if (ingredients[i].is_active && !ingredients[i].is_sliced) {
+            // 선분과 사각형 충돌 확인
+            if (CheckLineRectHit(x1, y1, x2, y2, &ingredients[i].pos)) {
+                // 베기 성공!
+                ingredients[i].is_sliced = 1;
+                App.game.score += 10; // 점수 추가
+            }
         }
     }
 }
