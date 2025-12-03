@@ -11,8 +11,11 @@ void ActGame(void);
 void ActIngredients(Ingredient *ingredients, int count);
 
 // 베기 로직(마우스 이동)에 따른 충돌 감지 및 점수/목숨 처리 함수
-// [수정] 배열([]) 대신 포인터(*) 사용
-void CheckSlice(Ingredient *ingredients, int count, int x1, int y1, int x2, int y2);
+// [수정 전]
+// void CheckSlice(Ingredient ingredients[], int count);
+
+// [수정 후] 좌표값(x1, y1, x2, y2)을 받을 수 있도록 매개변수 추가
+void CheckSlice(Ingredient ingredients[], int count, int x1, int y1, int x2, int y2);
 
 // 재료 생성 함수
 void SpawnIngredient(void);

@@ -41,16 +41,85 @@ void init_sdl(void) {
 
     app.font = TTF_OpenFont(FONT_PATH, FONTSIZE);
     
-    if (!app.font) {
-        // [중요] 에러 메시지를 빨간색으로 잘 보이게 출력
-        printf("\033[1;31m[ERROR] Font Load Fail: %s\033[0m\n", TTF_GetError());
-        printf("Current Path Check: please move '%s' to executable folder.\n", FONT_PATH);
-        // 폰트 없으면 게임 진행이 어려우므로 종료하거나 기본 처리
+
+    // 3. 렌더링 결과를 최종적으로 화면에 표시
+    SDL_RenderPresent(app.g_renderer);
+}
+
+#endif
+
+extern TextObject health_text;
+
+#if 1
+void InitSDL(void) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("[ERROR] in InitSDL(): %s\n", SDL_GetError());
+        exit(1);
+    }
+
+    app.g_window = SDL_CreateWindow(
+        "Huoguo Chef",
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        0);
+
+    if (!app.g_window) {
+        printf("[ERROR] in CreateWindow: %s\n", SDL_GetError());
+        exit(1);
     }
 
     app.g_window = SDL_CreateWindow("Hotpot Chef", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     app.g_renderer = SDL_CreateRenderer(app.g_window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_SetRenderDrawBlendMode(app.g_renderer, SDL_BLENDMODE_BLEND);
+    
+    if (!app.g_renderer) {
+        printf("[ERROR] in CreateRenderer: %s\n", SDL_GetError());
+        exit(1);
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        printf("[ERROR] Mix_OpenAudio: %s\n", Mix_GetError());
+        exit(1);
+    }
+
+    // 이미지 라이브러리 초기화
+    if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0) {
+        printf("[ERROR] in InitIMG: %s\n", IMG_GetError());
+        exit(1);
+    }
+
+    return;
+}
+
+// 2. InitAudio 함수 추가 (파일 불러오기) - 파일 맨 아래나 적절한 곳에 추가
+void InitAudio(void) {
+    // 배경음악 로드 (mp3 권장)
+    bgm = Mix_LoadMUS("./assets/bgm.mp3"); 
+    if (bgm == NULL) {
+        printf("[WARNING] Failed to load BGM: %s\n", Mix_GetError());
+    }
+
+    // 효과음 로드 (wav 권장)
+    effect_slice = Mix_LoadWAV("./assets/slice.wav");
+    if (effect_slice == NULL) {
+        printf("[WARNING] Failed to load Effect: %s\n", Mix_GetError());
+    }
+}
+
+void InitTTF(void) {
+    if (TTF_Init() < 0) {
+        printf("[ERROR] in InitTTF(): %s\n", TTF_GetError());
+        exit(1);
+    }
+
+    // 폰트 로드 (경로 확인 필수)
+    app.font = TTF_OpenFont("./assets/font.ttf", FONTSIZE);
+
+    if (!app.font) {
+        printf("[ERROR] Failed to load font: %s\n", TTF_GetError());
+        exit(1);
+    }
 
     app.font = TTF_OpenFont("./ttf/LiberationSans-Regular.ttf", FONTSIZE);
     
@@ -111,9 +180,17 @@ void cleanup_sdl(void) {
     if (shoes.texture) SDL_DestroyTexture(shoes.texture);
     
     if (score_text.texture) SDL_DestroyTexture(score_text.texture);
-    if (life_text.texture) SDL_DestroyTexture(life_text.texture);
-    if (gameover_text.texture) SDL_DestroyTexture(gameover_text.texture);
-    if (restart_text.texture) SDL_DestroyTexture(restart_text.texture);
+    if (health_text.texture) SDL_DestroyTexture(health_text.texture);
+    if (bgm) Mix_FreeMusic(bgm);
+    if (effect_slice) Mix_FreeChunk(effect_slice);
+    Mix_CloseAudio();
+    
+    // 2. 재료 텍스처 해제 (남아있는 재료가 있다면)
+    for (int i = 0; i < MAX_INGREDIENTS; i++) {
+        if (app.game.ingredients[i].texture) {
+            SDL_DestroyTexture(app.game.ingredients[i].texture);
+        }
+    }
 
     if (app.font) TTF_CloseFont(app.font);
     if (app.g_renderer) SDL_DestroyRenderer(app.g_renderer);
@@ -122,4 +199,19 @@ void cleanup_sdl(void) {
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
+
+    exit(flag);
+
+    return;
+}
+
+void QuitTTF(void) {
+    if (app.font) {
+
+        TTF_CloseFont(app.font);
+        app.font = NULL;
+    }
+    TTF_Quit();
+
+    return;
 }
