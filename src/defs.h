@@ -34,6 +34,8 @@
 
 #define TRAIL_LENGTH 10    // 마우스 궤적 길이
 
+#define HEART_SIZE 30 
+
 #define FONT_SIZE 20
 // [수정] 폰트 파일 이름을 상수로 정의 (경로 변경 시 여기만 바꾸면 됨)
 #define FONT_PATH "./LiberationSans-Regular.ttf" 
