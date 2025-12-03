@@ -10,6 +10,10 @@
 
 
 Ingredient mushroom, cabbage, meat, beanSprouts, shoes, stone;
+
+// [추가] 하트 이미지 변수 정의 
+Ingredient heart_red, heart_black;
+
 TextObject score_text, life_text;
 // [추가] 게임 오버용 텍스트 객체
 TextObject gameover_text, restart_text;
