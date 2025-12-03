@@ -121,6 +121,8 @@ void render_game(void) {
 
 #endif
 
+extern TextObject health_text;
+
 #if 1
 void InitSDL(void) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -149,6 +151,11 @@ void InitSDL(void) {
         exit(1);
     }
 
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        printf("[ERROR] Mix_OpenAudio: %s\n", Mix_GetError());
+        exit(1);
+    }
+
     // 이미지 라이브러리 초기화
     if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0) {
         printf("[ERROR] in InitIMG: %s\n", IMG_GetError());
@@ -156,6 +163,21 @@ void InitSDL(void) {
     }
 
     return;
+}
+
+// 2. InitAudio 함수 추가 (파일 불러오기) - 파일 맨 아래나 적절한 곳에 추가
+void InitAudio(void) {
+    // 배경음악 로드 (mp3 권장)
+    bgm = Mix_LoadMUS("./assets/bgm.mp3"); 
+    if (bgm == NULL) {
+        printf("[WARNING] Failed to load BGM: %s\n", Mix_GetError());
+    }
+
+    // 효과음 로드 (wav 권장)
+    effect_slice = Mix_LoadWAV("./assets/slice.wav");
+    if (effect_slice == NULL) {
+        printf("[WARNING] Failed to load Effect: %s\n", Mix_GetError());
+    }
 }
 
 void InitTTF(void) {
@@ -219,7 +241,10 @@ void QuitSDL(int flag) {
     // 1. 텍스트 텍스처 해제
     if (score_text.texture) SDL_DestroyTexture(score_text.texture);
     if (health_text.texture) SDL_DestroyTexture(health_text.texture);
-
+    if (bgm) Mix_FreeMusic(bgm);
+    if (effect_slice) Mix_FreeChunk(effect_slice);
+    Mix_CloseAudio();
+    
     // 2. 재료 텍스처 해제 (남아있는 재료가 있다면)
     for (int i = 0; i < MAX_INGREDIENTS; i++) {
         if (app.game.ingredients[i].texture) {
@@ -242,6 +267,7 @@ void QuitSDL(int flag) {
 
 void QuitTTF(void) {
     if (app.font) {
+
         TTF_CloseFont(app.font);
         app.font = NULL;
     }
