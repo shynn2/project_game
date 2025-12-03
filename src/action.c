@@ -1,10 +1,28 @@
 #include "utils.h"
 #include "action.h" 
-#include "defs.h" // SDL_mixer.h가 여기에 포함되어 있습니다.
+
 
 // [추가 1] main.c(main.h)에 있는 효과음 변수를 가져옵니다.
 extern App app;
 extern Mix_Chunk *effect_slice; // 효과음 변수 가져오기
+
+//재료 변수 가져오기
+extern Ingredient cabbage;
+extern Ingredient meat;
+extern Ingredient mushroom;
+extern Ingredient beanSprouts;
+extern Ingredient shoes;
+extern Ingredient stone;
+
+
+
+#define SPAWN_INTERVAL 40 //스폰 간격
+#define LAUNCH_SPEED_MIN 13.0f //재료 발사 속도 최소
+#define LAUNCH_SPEED_MAX 18.0f //재료 발사 속도 최대
+
+static int spawn_timer = 0;
+
+
 
 // 기존 ActIngredients 함수...
 void ActIngredients(Ingredient ingredients[], int count) { 
