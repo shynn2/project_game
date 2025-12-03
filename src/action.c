@@ -144,3 +144,4 @@ void ResetGame(void) {
         app.game.ingredients[i].is_active = 0;
     }
 }
+
