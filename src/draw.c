@@ -1,100 +1,100 @@
 #include "draw.h"
 
+const SDL_Color COLOR_WHITE = {255, 255, 255, 255};
+const SDL_Color COLOR_RED = {255, 50, 50, 255};
 
-// 1. 화면 지우기
 void ClearWindow(App *app) {
-    // 검은색(R:0, G:0, B:0)으로 설정
-    SDL_SetRenderDrawColor(app->g_renderer, 0, 0, 0, 255);
-    // 화면 전체를 지움
+    SDL_SetRenderDrawColor(app->g_renderer, 30, 30, 30, 255);
     SDL_RenderClear(app->g_renderer);
 }
 
-// 2. 화면 보여주기
 void ShowWindow(App *app) {
-    // 렌더러에 그려진 내용을 화면에 송출
     SDL_RenderPresent(app->g_renderer);
 }
 
-// 3. 게임 전체 그리기
-void DrawGame(App *app, TextObject *score_text, TextObject *life_text) {
+// [수정] 인자 추가됨
+void DrawGame(App *app, TextObject *score, TextObject *life, TextObject *go, TextObject *restart) {
     
-    // A. 모든 재료 그리기
-    // MAX_INGREDIENTS 만큼 반복하면서 활성화된 재료만 그림
+    // A. 재료 그리기
     for (int i = 0; i < MAX_INGREDIENTS; i++) {
-        // App -> Game -> Ingredients 배열 접근
         Ingredient *ing = &app->game.ingredients[i];
-        
-        // 화면에 살아있는(is_active) 재료만 그린다
         if (ing->is_active) {
             RenderEntity(app, ing);
         }
     }
 
-    // B. UI(점수, 목숨) 그리기
-    RenderScoreBoard(app, score_text);
-    RenderScoreBoard(app, life_text);
+    // B. 마우스 궤적
+    SDL_SetRenderDrawColor(app->g_renderer, 255, 255, 255, 255);
+    for (int i = 0; i < TRAIL_LENGTH - 1; i++) {
+        int idx1 = (app->trail_head + i) % TRAIL_LENGTH;
+        int idx2 = (app->trail_head + i + 1) % TRAIL_LENGTH;
+        if (app->trail_points[idx1].x != -1 && app->trail_points[idx2].x != -1) {
+            SDL_RenderDrawLine(app->g_renderer, 
+                app->trail_points[idx1].x, app->trail_points[idx1].y,
+                app->trail_points[idx2].x, app->trail_points[idx2].y);
+        }
+    }
+
+    // C. 점수판 및 생명 그리기 (항상 표시)
+    RenderScoreBoard(app, score);
+    RenderScoreBoard(app, life);
+
+    // D. 게임 오버 화면
+    if (app->game.game_over) {
+        // 반투명 배경
+        SDL_SetRenderDrawBlendMode(app->g_renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(app->g_renderer, 0, 0, 0, 200);
+        SDL_Rect screen_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        SDL_RenderFillRect(app->g_renderer, &screen_rect);
+        SDL_SetRenderDrawBlendMode(app->g_renderer, SDL_BLENDMODE_NONE);
+
+        // [추가] 텍스트 그리기 (중앙 정렬은 init.c에서 위치 잡음)
+        RenderScoreBoard(app, go);
+        RenderScoreBoard(app, restart);
+    }
 }
 
-// 4. 개별 재료 그리기
 void RenderEntity(App *app, Ingredient *ing) {
-    // 텍스처가 없으면 그리지 않음 (안전장치)
     if (ing->texture == NULL) return;
-
     SDL_Rect dest;
-    
-    // 구조체의 float 좌표를 int로 변환 (SDL은 int 좌표를 씀)
     dest.x = (int)ing->x;
     dest.y = (int)ing->y;
     dest.w = ing->w;
     dest.h = ing->h;
 
-    // 화면에 복사 (회전 없이 정방향)
+    if (ing->is_sliced) {
+        SDL_SetTextureColorMod(ing->texture, 150, 150, 150);
+        SDL_SetTextureAlphaMod(ing->texture, 200);
+    } else {
+        SDL_SetTextureColorMod(ing->texture, 255, 255, 255);
+        SDL_SetTextureAlphaMod(ing->texture, 255);
+    }
+    
+    if (ing->is_enemy && !ing->is_sliced) {
+        SDL_SetRenderDrawColor(app->g_renderer, 255, 0, 0, 255);
+        SDL_RenderDrawRect(app->g_renderer, &dest);
+    }
     SDL_RenderCopy(app->g_renderer, ing->texture, NULL, &dest);
 }
 
-// 5. 텍스트 그리기
 void RenderScoreBoard(App *app, TextObject *text_obj) {
-    // 텍스처가 존재할 때만 그림
     if (text_obj->texture != NULL) {
         SDL_RenderCopy(app->g_renderer, text_obj->texture, NULL, &text_obj->rect);
     }
 }
 
-// 6. 텍스트 내용 업데이트 (가장 중요한 함수!)
 void UpdateScoreBoard(App *app, TextObject *text_obj, char *str, SDL_Color color) {
-    
-    // A. 기존 텍스처가 있다면 삭제 (메모리 누수 방지)
+    if (app->font == NULL) return;
     if (text_obj->texture != NULL) {
         SDL_DestroyTexture(text_obj->texture);
         text_obj->texture = NULL;
     }
-
-    // 폰트가 로드되지 않았다면 중단
-    if (app->font == NULL) return;
-
-    // B. 폰트와 문자열을 이용해 Surface(임시 비트맵) 생성
     SDL_Surface *surface = TTF_RenderText_Solid(app->font, str, color);
-    
-    if (surface == NULL) {
-        printf("Text Render Error: %s\n", TTF_GetError());
-        return;
-    }
-
-    // C. Surface를 Texture(GPU 이미지)로 변환
+    if (surface == NULL) return;
     text_obj->texture = SDL_CreateTextureFromSurface(app->g_renderer, surface);
-    
-    if (text_obj->texture == NULL) {
-        printf("Texture Create Error: %s\n", SDL_GetError());
-        SDL_FreeSurface(surface);
-        return;
+    if (text_obj->texture != NULL) {
+        text_obj->rect.w = surface->w;
+        text_obj->rect.h = surface->h;
     }
-
-    // D. 만들어진 이미지의 크기를 TextObject의 rect에 저장
-    text_obj->rect.w = surface->w;
-    text_obj->rect.h = surface->h;
-    
-    // (x, y 위치는 main함수에서 초기화할 때 정해둔 것을 그대로 씀)
-
-    // E. 임시로 만든 Surface는 이제 필요 없으니 삭제
     SDL_FreeSurface(surface);
 }

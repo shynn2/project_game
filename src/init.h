@@ -3,10 +3,9 @@
 
 #include "defs.h"
 
-// main.c에 정의된 전역 변수들을 사용하겠다고 선언 (예제 스타일)
+// 전역 변수 (외부 참조)
 extern App app;
-extern TextObject score_text;
-extern TextObject life_text;
+extern int g_game_running;
 
 // [init.h 파일 수정]
 
@@ -32,4 +31,4 @@ void InitScoreBoard(void); // 점수판 및 목숨 텍스트 초기화
 void QuitSDL(int flag);
 void QuitTTF(void);
 
-#endif
+#endif // INIT_H

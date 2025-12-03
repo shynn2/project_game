@@ -1,34 +1,35 @@
-# Use gcc as default C compiler
+# 컴파일러 설정
 CC = gcc
 
-# Target name
+# 타겟 실행 파일 이름
 TARGET = HuoguoChef
 
-# Add compile options
-CFLAGS += `sdl2-config --cflags` -g -lefence
+# 컴파일 옵션 (SDL2 설정 포함)
+# -I src: src 폴더의 헤더 파일을 찾도록 설정
+CFLAGS = `sdl2-config --cflags` -g -Wall -I src
 
-# Add linking options
-LDFLAGS += `sdl2-config --libs` -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lm
+# 링크 옵션 (SDL2 라이브러리 및 수학 라이브러리 링크)
+LDFLAGS = `sdl2-config --libs` -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
 
-# Source files' list: files with extension .c
-# For example, main.c draw.c init.c input.c utils.c
-SRCS = $(wildcard *.c) # 소스파일로 간주
-# Object files' list: files with name of source files and extension .o
-# For example, main.o draw.o init.o input.o utils.o
-OBJS = $(patsubst %.c,%.o,$(SRCS))
+# 소스 파일 목록 (src 폴더 내의 모든 .c 파일)
+SRCS = $(wildcard src/*.c)
 
-# Step 1: make object files
-# gcc `sdl2-config --cflags` -g -lefence -c OOO.c
-%.o: %.c
-	$(CC) $(CFLAGS) -c $<
+# 오브젝트 파일 목록 (src 폴더 내에 .o 파일 생성)
+OBJS = $(SRCS:.c=.o)
 
-# Step 2: make executable files and link libraries
-# gcc -o (object files) `sdl2-config --libs` -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lm
+# 기본 타겟
+all: $(TARGET)
+
+# 실행 파일 생성 규칙
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS)
-	@mv $(TARGET) ..
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-# clear all object files
+# .c 파일을 .o 파일로 컴파일하는 규칙
+src/%.o: src/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# 청소 규칙
 clean:
-	@rm -rf *.o
+	rm -f src/*.o $(TARGET)
 
+.PHONY: all clean
