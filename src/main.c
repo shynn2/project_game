@@ -32,8 +32,3 @@ int main(int argc, char *argv[]) {
     cleanup_sdl();
     return 0;
 }
-
-    // 3. 종료
-    cleanup_sdl();
-    return 0;
-}
