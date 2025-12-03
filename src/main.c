@@ -20,7 +20,13 @@ int main(void) {
     // 1. 초기화 (init.c의 함수 사용)
     init_sdl();
     InitIngredient(); // 재료 및 텍스처 로딩
+    InitAudio();
 
+    // [추가!] 배경음악 재생 (-1은 무한 반복)
+    if (bgm != NULL) {
+        Mix_PlayMusic(bgm, -1);
+    }
+    
     // 텍스트 객체 초기화 (색상 설정 등)
     SDL_Color black = {0, 0, 0, 255};
     SDL_Color red = {255, 0, 0, 255};
