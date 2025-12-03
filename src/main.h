@@ -9,7 +9,7 @@
 #include "draw.h"
 #include "sound.h"
 
-APP app;
+App app;
 TextObject score_text;
 
 TextObject health_text;
