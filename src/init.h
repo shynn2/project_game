@@ -24,6 +24,7 @@ void InitAudio(void); // <--- [추가!] 오디오 로딩 함수 선언
 
 // 2. 게임 데이터 초기화
 void InitGameData(void);   // 예제의 InitPlayer + InitBullet 역할 (데이터 리셋)
+void ActIngredient(void);
 void InitScoreBoard(void); // 점수판 및 목숨 텍스트 초기화
 
 
