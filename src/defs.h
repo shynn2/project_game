@@ -29,7 +29,7 @@
 #define MAX_INGREDIENTS 50  // 화면에 나타나는 재료의 최대 개수
 #define MAX_HEALTH 3 // 목숨 개수는 3
 
-#define GRAVITY 0.5f
+#define GRAVITY 0.981
 #define FONTSIZE 20       
 
 #define TRAIL_LENGTH 10
@@ -55,7 +55,7 @@ typedef struct {
 // 구조체 정의 
 typedef struct {
     int score;          // 현재 점수
-    int lives;          // 남은 목숨 (여기 들어갑니다!)
+    int health;          // 남은 목숨 (여기 들어갑니다!)
     int game_over;     // 게임 종료 여부
     
     // 게임 내 모든 재료들을 여기서 관리
