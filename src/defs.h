@@ -62,14 +62,6 @@ typedef struct {
     // 날짜나 이름도 넣을 수 있지만 일단 점수만 저장
 } LeaderboardEntry;
 
-/*typedef struct {
-    int score;
-    int lives;
-    int game_over;
-    int high_score; // [추가] 최고 점수 저장용
-    Ingredient ingredients[MAX_INGREDIENTS];
-} Game; */
-
 // 텍스트 객체 구조체
 typedef struct {
     SDL_Texture *texture; // 글자 이미지 데이터
