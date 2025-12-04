@@ -39,7 +39,7 @@ void InitIngredient(void) {
 
     LOAD_TEX(cabbage, "./gfx/cabbage.png");
     LOAD_TEX(meat, "./gfx/meat.png");
-    LOAD_TEX(mushroom, "./gfx/mushrooms.png");
+    LOAD_TEX(mushroom, "./gfx/mushroom.png");
     LOAD_TEX(beanSprouts, "./gfx/bean_sprouts.png");
     LOAD_TEX(shoes, "./gfx/shoes.png");
     stone.texture = shoes.texture;
