@@ -124,6 +124,9 @@ void cleanup_sdl(void) {
     if (mushroom.texture) SDL_DestroyTexture(mushroom.texture);
     if (beanSprouts.texture) SDL_DestroyTexture(beanSprouts.texture);
     if (shoes.texture) SDL_DestroyTexture(shoes.texture);
+
+    if (heart_red.texture) SDL_DestroyTexture(heart_red.texture);
+    if (heart_black.texture) SDL_DestroyTexture(heart_black.texture);
     
     if (score_text.texture) SDL_DestroyTexture(score_text.texture);
     if (life_text.texture) SDL_DestroyTexture(life_text.texture);
