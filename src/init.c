@@ -43,6 +43,9 @@ void InitIngredient(void) {
     LOAD_TEX(beanSprouts, "./gfx/bean_sprouts.png");
     LOAD_TEX(shoes, "./gfx/shoes.png");
     stone.texture = shoes.texture;
+
+    LOAD_TEX(heart_red, "./gfx/heart_red.png");
+    LOAD_TEX(heart_black, "./gfx/heart_black.png");
 }
 
 void init_sdl(void) {
